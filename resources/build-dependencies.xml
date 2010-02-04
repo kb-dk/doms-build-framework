@@ -33,6 +33,9 @@
 
     <property name="global.dir" value="${basedir}"/>
 
+    <dirname property="dependencies.basedir" file="${ant.file.dependencies}"/>
+
+
     <fileset id="module.libs" dir="${basedir}/lib">
         <include name="**/jars/*.jar"/>
     </fileset>
@@ -53,14 +56,14 @@
 
 
     <path id="rhino.classpath">
-        <fileset dir="${global.dir}/build-libs/rhino/jars">
+        <fileset dir="${dependencies.basedir}/build-libs/rhino/jars">
             <include name="*.jar"/>
         </fileset>
     </path>
 
     <target name="depends" depends="_predepends">
         <script language="javascript" classpathref="rhino.classpath"
-                src="${global.dir}/dependsforloop.js"/>
+                src="${dependencies.basedir}/dependsforloop.js"/>
         <antcall target="_postdepends"/>
 
 

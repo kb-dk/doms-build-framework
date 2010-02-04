@@ -28,13 +28,15 @@
   -->
 
 <project name="webservice">
-        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
     <property name="warfilename" value="${ant.project.name}.war"/>
 
     <import file="build-common.xml"/>
 
-    <target name="war" depends="jar"
+    <dirname property="webservice.basedir" file="${ant.file.webservice}"/>
+
+    <target name="war"
             description="Pack the webdirectory into a warfile ready for deployment">
         <mkdir dir="dist"/>
         <pathconvert property="module.dependencies.pathconvert"
@@ -43,7 +45,7 @@
         </pathconvert>
 
         <script language="javascript" classpathref="rhino.classpath"
-                src="${global.dir}/convertPath.js"/>
+                src="${webservice.basedir}/convertPath.js"/>
 
 
         <copy todir="libtemp" flatten="true">

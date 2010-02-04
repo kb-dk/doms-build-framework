@@ -28,7 +28,7 @@
   -->
 
 <project name="common">
-        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
 
     <property name="global.dir" value="${basedir}"/>
@@ -36,6 +36,8 @@
     <property name="srcpack.zip" value="${ant.project.name}-src.zip"/>
 
     <import file="build-dependencies.xml"/>
+
+    <dirname property="common.basedir" file="${ant.file.common}"/>
 
     <selector id="common.jars">
         <filename name="sbutils-0.4.6/jars/**/*.jar"/>
@@ -60,25 +62,6 @@
     </selector>
 
 
-    <target name="_preclean"/>
-    <target name="_postclean"/>
-
-    <target name="_preinit"/>
-    <target name="_postinit"/>
-
-    <target name="_postcompile"/>
-    <target name="_precompile"/>
-
-    <target name="_predist"/>
-    <target name="_postdist"/>
-
-
-    <target name="_predist"/>
-    <target name="_postdist"/>
-
-
-    <target name="_predist"/>
-    <target name="_postdist"/>
 
     <dirset id="module.dependencies" dir="${global.dir}/modules">
         <exclude name="**"/>
@@ -100,6 +83,9 @@
     </path>
 
 
+    <target name="_preclean"/>
+    <target name="_postclean"/>
+
     <target name="clean" depends="_preclean"
             description="Cleans the package of all build artifacts.">
         <delete dir="classes"/>
@@ -109,9 +95,19 @@
     </target>
 
 
+
+    <target name="_preinit"/>
+    <target name="_postinit"/>
+
+
     <target name="init">
         <echo message="Using doms buildframework version BUILD.FRAMEWORK.VERSION"/>
     </target>
+
+
+
+    <target name="_postcompile"/>
+    <target name="_precompile"/>
 
 
     <target name="compile" depends="init,depends,_precompile"
@@ -123,7 +119,7 @@
         </pathconvert>
 
         <script language="javascript" classpathref="rhino.classpath"
-                src="${global.dir}/convertPath.js"/>
+                src="${common.basedir}/convertPath.js"/>
 
         <!-- get the source compile classpath in a printable form -->
         <pathconvert pathsep="${line.separator}|   |-- "
@@ -158,13 +154,21 @@
         <antcall target="_postcompile"/>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="_prejar"/>
+    <target name="_postjar"/>
+
+
+
+    <target name="jar" depends="compile,_prejar">
         <mkdir dir="dist"/>
 
         <jar destfile="dist/${jarfile}"
              basedir="classes"/>
-
+        <antcall target="_postjar"/>
     </target>
+
+    <target name="_predist"/>
+    <target name="_postdist"/>
 
     <target name="dist" depends="jar,sourcezip,_predist"
             description="Build the distributable package">
@@ -176,7 +180,11 @@
         <antcall target="_postdist"/>
     </target>
 
-    <target name="sourcezip">
+    <target name="_presourcezip"/>
+    <target name="_postsourcezip"/>
+
+
+    <target name="sourcezip" depends="_presourcezip">
         <mkdir dir="dist"/>
 
         <zip destfile="dist/${srcpack.zip}">
@@ -187,6 +195,7 @@
                 <include name="**/*"/>
             </zipfileset>
         </zip>
+        <antcall target="_postsourcezip"/>
     </target>
 
 
