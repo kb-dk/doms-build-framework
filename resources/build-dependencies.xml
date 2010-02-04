@@ -29,6 +29,7 @@
 
 <!-- Global- and module specific libs -->
 <project name="dependencies">
+    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
     <property name="global.dir" value="${basedir}"/>
 

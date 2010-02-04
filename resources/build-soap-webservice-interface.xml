@@ -28,6 +28,7 @@
   -->
 
 <project name="soap-webservice-interface">
+        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
     <import file="build-common.xml"/>
 

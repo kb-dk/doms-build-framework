@@ -28,6 +28,7 @@
   -->
 
 <project name="common">
+        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
 
     <property name="global.dir" value="${basedir}"/>

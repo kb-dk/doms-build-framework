@@ -28,7 +28,7 @@
   -->
 
 <project name="jaxb">
-
+    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
     <!--    <import  file="build-webservice.xml"/>-->
 
