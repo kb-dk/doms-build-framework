@@ -33,10 +33,12 @@ the module to build as a REST webservice-->
         <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
     <!--    <import file="build-webservice.xml"/>-->
 
+    <property file="${global.dir}/build.properties"/>
+
     <selector id="rest.jars">
         <or>
-            <filename name="jersey-1.1.4/jars/**/*.jar"/>
-            <filename name="jsr311-api-1.0/jars/**/*.jar"/>
+            <filename name="${jersey.dir}/jars/**/*.jar"/>
+            <filename name="${jsr311.dir}/jars/**/*.jar"/>
         </or>
     </selector>
 

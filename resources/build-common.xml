@@ -37,10 +37,12 @@
 
     <import file="build-dependencies.xml"/>
 
+    <property file="${global.dir}/build.properties"/>
+
     <dirname property="common.basedir" file="${ant.file.common}"/>
 
     <selector id="common.jars">
-        <filename name="sbutils-0.4.6/jars/**/*.jar"/>
+        <filename name="${sbutils.dir}/jars/**/*.jar"/>
     </selector>
     <selector id="soap.jars">
         <not>

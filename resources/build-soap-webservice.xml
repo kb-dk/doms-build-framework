@@ -32,10 +32,10 @@ for the module to build as a soap webservice-->
 <project name="soap-webservice">
         <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
-    <!--    <import file="build-webservice.xml"/>-->
+    <property file="${global.dir}/build.properties"/>
 
     <selector id="soap.jars">
-        <filename name="jaxws-ri-2.1.7/jars/**/*.jar"/>
+        <filename name="${jaxws.dir}/jars/**/*.jar"/>
     </selector>
 
 
