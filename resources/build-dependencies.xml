@@ -30,6 +30,7 @@
 <!-- Global- and module specific libs -->
 <project name="dependencies">
     <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <property file="build-framework.properties"/>
 
     <property name="global.dir" value="${basedir}"/>
 
@@ -56,7 +57,7 @@
 
 
     <path id="rhino.classpath">
-        <fileset dir="${dependencies.basedir}/build-libs/rhino/jars">
+        <fileset dir="${dependencies.basedir}/${rhino.folder}">
             <include name="*.jar"/>
         </fileset>
     </path>
