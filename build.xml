@@ -38,7 +38,7 @@
       </target>
 
     <target  name="maketemp" depends="init">
-        <copydir dest="${temp}" src="resources"/>
+        <copydir dest="${temp}" src="data"/>
     </target>
 
     <target  name="replace" depends="maketemp">
