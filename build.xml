@@ -1,5 +1,5 @@
 <!--
-  ~ BUILD.FRAMEWORK.VERSION
+  ~ Doms build framework version BUILD.FRAMEWORK.VERSION
   ~
   ~ $Id$
   ~ $Revision$
@@ -45,6 +45,7 @@
         <replace dir="${temp}" token="BUILD.FRAMEWORK.VERSION" value="${build.framework.version}">
             <include name="**/*.xml"/>
             <include name="**/*.js"/>
+            <include name="**/*.properties"/>
         </replace>
     </target>
 
