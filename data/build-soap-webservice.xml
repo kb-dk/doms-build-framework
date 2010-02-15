@@ -31,6 +31,7 @@
 for the module to build as a soap webservice-->
 <project name="soap-webservice">
         <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <property name="global.dir" value="${basedir}/.."/>
 
     <property file="${global.dir}/build.properties"/>
 

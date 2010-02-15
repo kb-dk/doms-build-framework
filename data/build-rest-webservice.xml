@@ -32,6 +32,7 @@ the module to build as a REST webservice-->
 <project name="rest-webservice">
         <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
     <!--    <import file="build-webservice.xml"/>-->
+    <property name="global.dir" value="${basedir}/.."/>
 
     <property file="${global.dir}/build.properties"/>
 

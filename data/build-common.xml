@@ -31,7 +31,7 @@
     <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
 
-    <property name="global.dir" value="${basedir}"/>
+    <property name="global.dir" value="${basedir}/.."/>
     <property name="jarfile" value="${ant.project.name}.jar"/>
     <property name="srcpack.zip" value="${ant.project.name}-src.zip"/>
 

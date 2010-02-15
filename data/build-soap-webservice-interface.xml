@@ -29,6 +29,7 @@
 
 <project name="soap-webservice-interface">
         <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <property name="global.dir" value="${basedir}/.."/>
 
     <import file="build-common.xml"/>
 

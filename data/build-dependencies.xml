@@ -32,7 +32,7 @@
     <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
 
-    <property name="global.dir" value="${basedir}"/>
+    <property name="global.dir" value="${basedir}/.."/>
 
     <dirname property="dependencies.basedir" file="${ant.file.dependencies}"/>
 
