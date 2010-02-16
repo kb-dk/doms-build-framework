@@ -33,8 +33,9 @@
 
     <property file="${global.dir}/build.properties"/>
 
-    <property name="dist.zip" value="${ant.project.name}-${version}.zip"/>
-        <property name="dist.src.zip" value="${ant.project.name}-src-${version}-.zip"/>
+    <property name="dist.name" value="${ant.project.name}-${version}"/>
+    <property name="dist.zip" value="${dist.name}.zip"/>
+    <property name="dist.src.zip" value="${dist.name}-src.zip"/>
 
     <dirname property="dist.basedir" file="${ant.file.dist}"/>
 
@@ -46,9 +47,9 @@
 
 
 
-            <subant target="clean">
-                <fileset dir="." includes="**/build.xml"/>
-            </subant>
+        <subant target="clean">
+            <fileset dir="." includes="**/build.xml"/>
+        </subant>
 
     </target>
 
@@ -86,42 +87,44 @@
             <fileset refid="project.modules.apidocs"/>
         </copy>
 
-        <copy todir="licensestemp">
+        <copy todir="licensestemp"><!--TODO licenses from module libs??-->
             <fileset refid="project.modules.licenses"/>
             <fileset dir="lib/">
-              <include name="**/license/*"/>
+                <include name="**/license/*"/>
             </fileset>
             <regexpmapper from="(.*)/license(/.*)" to="\1\2"/>
         </copy>
 
 
         <zip destfile="dist/${dist.zip}">
-            <zipfileset prefix="jars" dir="libtemp">
+            <zipfileset prefix="${dist.name}/jars" dir="libtemp">
             </zipfileset>
-            <zipfileset prefix="license" dir="licensestemp"/>
-            <zipfileset prefix="license" dir="${global.dir}">
+            <zipfileset prefix="${dist.name}/license" dir="licensestemp"/>
+            <zipfileset prefix="${dist.name}/license" dir="${global.dir}">
                 <include name="LICENSE"/>
+                <include name="NOTICE"/>
+                <include name="README"/>
             </zipfileset>
-            <zipfileset prefix="apidocs" dir="apidocstemp">
+            <zipfileset prefix="${dist.name}/apidocs" dir="apidocstemp">
             </zipfileset>
         </zip>
 
-                <delete  dir="libtemp"/>
-                <delete  dir="apidocstemp"/>
-                <delete  dir="licensestemp"/>
+        <delete dir="libtemp"/>
+        <delete dir="apidocstemp"/>
+        <delete dir="licensestemp"/>
 
         <antcall target="_postdist.bin"/>
     </target>
 
 
     <target name="_predist.src"/>
-
     <target name="_postdist.src"/>
+
     <target name="dist.src" depends="distclean,_predist.src">
         <mkdir dir="${global.dir}/dist"/>
 
         <zip destfile="dist/${dist.src.zip}">
-            <zipfileset prefix="" dir=".">
+            <zipfileset prefix="${dist.name}" dir=".">
             </zipfileset>
         </zip>
 
@@ -130,9 +133,9 @@
 
     <target name="clean">
         <delete dir="dist"/>
-        <delete  dir="libtemp"/>
-        <delete  dir="apidocstemp"/>
-        <delete  dir="licensestemp"/>
+        <delete dir="libtemp"/>
+        <delete dir="apidocstemp"/>
+        <delete dir="licensestemp"/>
     </target>
 
 </project>
