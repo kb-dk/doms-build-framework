@@ -1,5 +1,5 @@
 <!--
-  ~ Doms build framework version 1.0.5
+  ~ Doms build framework version BUILD.FRAMEWORK.VERSION
   ~
   ~ $Id$
   ~ $Revision$
@@ -29,7 +29,7 @@
 
 <!-- Global- and module specific libs -->
 <project name="dependencies">
-    <!--Part of doms build framework version 1.0.5-->
+    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
 
 
     <property name="global.dir" value="${basedir}/.."/>
