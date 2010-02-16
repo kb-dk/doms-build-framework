@@ -40,14 +40,6 @@
     <target name="war"
             description="Pack the webdirectory into a warfile ready for deployment">
         <mkdir dir="dist"/>
-        <pathconvert property="module.dependencies.pathconvert"
-                     refid="module.dependencies">
-            <mapper type="regexp" from="^(.)*" to="\0/dist/\*.jar"/>
-        </pathconvert>
-
-        <script language="javascript" classpathref="rhino.classpath"
-                src="${webservice.basedir}/convertPath.js"/>
-
 
         <copy todir="libtemp" flatten="true">
 
