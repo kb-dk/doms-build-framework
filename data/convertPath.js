@@ -36,7 +36,23 @@ importPackage(Packages.org.apache.tools.ant.taskdefs);
 
 
 // Obtain a reference to a fileset in the enclosing project
-dirSet = project.getReference("module.dependencies");
+dirSetname = attributes.get("dirset");
+dirSet = project.getReference(dirSetname);
+if (dirSetname == null){
+    self.fail("Invalid number of arguments for convertPath")
+}
+
+
+postfix = attributes.get("postfix")
+if (postfix == null){
+    self.fail("Invalid number of arguments for convertPath")
+}
+
+newfileset = attributes.get("newfileset")
+if (newfileset == null){
+    self.fail("Invalid number of arguments for convertPath")
+}
+
 
 //This requires ant 1.7+ //TODO find another way that is more backwards
 includes = dirSet.mergeIncludes(project);
@@ -50,7 +66,7 @@ fileset.setDir(dirSet.getDir());
 
 if (includes != null) {
     for (var i = 0; i < includes.length; i++) {
-        fileset.setIncludes(includes[i] + "/dist/**/*.jar");
+        fileset.setIncludes(includes[i] + postfix);
     }
 }
 
@@ -60,4 +76,4 @@ if (excludes != null) {
     }
 }
 
-project.addReference("module.dependencies.jars", fileset);
+project.addReference(newfileset, fileset);
