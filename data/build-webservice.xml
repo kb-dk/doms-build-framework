@@ -1,5 +1,5 @@
 <!--
-  ~ Doms build framework version BUILD.FRAMEWORK.VERSION
+  ~ Doms build framework version 1.0.5
   ~
   ~ $Id$
   ~ $Revision$
@@ -28,7 +28,7 @@
   -->
 
 <project name="webservice">
-    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <!--Part of doms build framework version 1.0.5-->
     <property name="global.dir" value="${basedir}/.."/>
     
     <property name="warfilename" value="${ant.project.name}.war"/>
@@ -38,17 +38,18 @@
     <dirname property="webservice.basedir" file="${ant.file.webservice}"/>
 
     <target name="war"
-            description="Pack the webdirectory into a warfile ready for deployment">
+            description="Pack the webdirectory into a warfile ready for deployment"
+            depends="init">
+        <delete dir="dist"/>
         <mkdir dir="dist"/>
 
         <copy todir="libtemp" flatten="true">
-
             <fileset refid="module.libs"/>
-            <fileset refid="project.libs"/>
-            <fileset dir="${global.dir}/lib">
-                <selector refid="all.jars"/>
-            </fileset>
+            <fileset refid="project.libs.jars"/>
             <fileset refid="module.dependencies.jars"/>
+            <fileset refid="soap.jars"/>
+            <fileset refid="rest.jars"/>
+            <fileset refid="common.jars"/>
         </copy>
 
         <antcall target="war.with.wsdl"/>
@@ -74,6 +75,8 @@
         </war>
 
     </target>
+
+    <target name="_copyLibsForDist"/>
 
     <target name="war.without.wsdl" unless="wsdl.dir">
         <war destfile="dist/${warfilename}"

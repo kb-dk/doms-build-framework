@@ -1,5 +1,5 @@
 <!--
-  ~ Doms build framework version BUILD.FRAMEWORK.VERSION
+  ~ Doms build framework version 1.0.5
   ~
   ~ $Id$
   ~ $Revision$
@@ -28,7 +28,7 @@
   -->
 
 <project name="soap-webservice-interface">
-        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+        <!--Part of doms build framework version 1.0.5-->
     <property name="global.dir" value="${basedir}/.."/>
 
     <import file="build-common.xml"/>
@@ -38,11 +38,6 @@
     <property name="wsdl.package" value="THIS_SHOULD_BE_OVERRIDDEN"/>
 
     <import file="build-soap-webservice.xml"/>
-
-    <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-        <classpath refid="build.classpath"/>
-    </taskdef>
-
 
     <target name="_preinit" depends="interface.changed">
         <mkdir dir="classes"/>
@@ -87,6 +82,12 @@
             <property name="classpath" refid="build.classpath"/>
             <echo message="${classpath}"/>
         -->
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+            <classpath>
+                <fileset refid="soap.jars" />
+            </classpath>
+        </taskdef>
+        
         <wsimport
 
                 verbose="true"

@@ -1,5 +1,5 @@
 /*
- * Doms build framework version BUILD.FRAMEWORK.VERSION
+ * Doms build framework version 1.0.5
  *
  * $Id$
  * $Revision$
@@ -27,7 +27,7 @@
  * under the License.
  */
 
-/* Part of doms build framework version BUILD.FRAMEWORK.VERSION */
+/* Part of doms build framework version 1.0.5 */
 importClass(java.io.File);
 importPackage(Packages.org.apache.tools.ant);
 importPackage(Packages.org.apache.tools.ant.types);

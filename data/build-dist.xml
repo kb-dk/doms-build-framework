@@ -44,6 +44,7 @@
         <delete  dir="libtemp"/>
         <delete  dir="apidocstemp"/>
         <delete  dir="licensetemp"/>
+        <delete  dir="usedlibs"/>
 
 
 
@@ -61,26 +62,68 @@
     <target  name="_predist.bin"/>
     <target name="_postdist.bin"/>
 
+    <target name="_preapidocs"/>
+
+    <target name="_postapidocs"/>
+
+    <target name="apidocs" depends="distclean, _preapidocs">
+        <mkdir dir="docstemp"/>
+        <mkdir dir="dist"/>
+        <path id="build.classpath">
+            <fileset dir="${global.dir}/lib">
+                <include  name="**/*.jar"/>
+            </fileset>
+        </path>
+
+        <convertPath dirset="project.modules" postfix="/src/**/*.java" newfileset="project.modules.javafiles"/>
+        <convertPath dirset="project.modules" postfix="/tempsrc/**/*.java" newfileset="project.modules.javatempfiles"/>
+
+        <javadoc destdir="docstemp" classpathref="build.classpath">
+            <sourcefiles>
+                <fileset refid="project.modules.javafiles"/>
+                <fileset refid="project.modules.javatempfiles"/>
+            </sourcefiles>
+        </javadoc>
+        <zip destfile="dist/${docspack.zip}">
+            <zipfileset dir="docstemp">
+                <include name="**/*"/>
+            </zipfileset>
+        </zip>
+        <delete dir="docstemp"/>
+        <antcall target="_postapidocs"/>
+    </target>
+
     <target name="dist.bin" depends="_predist.bin">
-        <delete  dir="dist"/>
+        
         <mkdir dir="dist"/>
         <mkdir dir="libtemp"/>
         <mkdir dir="apidocstemp"/>
         <mkdir dir="licensestemp"/>
+        <mkdir dir="usedlibs"/>
 
         <dependsloop target="all" dependencies="project.modules"/>
 
+        <dependsloop target="_copyLibsForDist" dependencies="project.modules"/>
+<!--
+        <antcall target="include.jars"/>
+        <antcall target="include.wars"/>
+-->
+
+
         <convertPath dirset="project.modules" postfix="/dist/**/*.jar" newfileset="project.modules.jars"/>
+        <convertPath dirset="project.modules" postfix="/dist/**/*.war" newfileset="project.modules.wars"/>
+
 
         <convertPath dirset="project.modules" postfix="/dist/**/*-apidocs.zip" newfileset="project.modules.apidocs"/>
 
         <convertPath dirset="project.modules" postfix="**/license/*" newfileset="project.modules.licenses"/>
 
         <copy todir="libtemp" flatten="true" failonerror="false">
-            <fileset dir="${global.dir}/lib">
+            <fileset dir="${global.dir}/usedlibs">
                 <include name="**/jars/*.jar"/>
             </fileset>
             <fileset refid="project.modules.jars"/>
+            <fileset refid="project.modules.wars"/>
         </copy>
 
         <copy todir="apidocstemp" flatten="true">
@@ -89,7 +132,7 @@
 
         <copy todir="licensestemp"><!--TODO licenses from module libs??-->
             <fileset refid="project.modules.licenses"/>
-            <fileset dir="lib/">
+            <fileset dir="usedlibs/">
                 <include name="**/license/*"/>
             </fileset>
             <regexpmapper from="(.*)/license(/.*)" to="\1\2"/>
@@ -137,5 +180,7 @@
         <delete dir="apidocstemp"/>
         <delete dir="licensestemp"/>
     </target>
+
+        <target name="dist.all" depends="dist.src,dist.bin"/>
 
 </project>

@@ -1,5 +1,5 @@
 <!--
-  ~ Doms build framework version BUILD.FRAMEWORK.VERSION
+  ~ Doms build framework version 1.0.5
   ~
   ~ $Id$
   ~ $Revision$
@@ -28,7 +28,7 @@
   -->
 
 <project name="jaxb">
-    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <!--Part of doms build framework version 1.0.5-->
 
     <!--    <import  file="build-webservice.xml"/>-->
     <property name="global.dir" value="${basedir}/.."/>
@@ -39,9 +39,6 @@
         <exclude name="**/*"/>
     </fileset>
 
-    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
-        <classpath refid="build.classpath"/>
-    </taskdef>
 
 
     <target name="jaxb.generate">
@@ -49,6 +46,12 @@
         <echo message="Now we generate fedora types"/>
         <property name="schemas" refid="schema.files"/>
         <echo message="${schemas}"/>
+        <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+            <classpath>
+                <fileset refid="soap.jars"/>
+            </classpath>
+        </taskdef>
+
         <xjc destdir="tempsrc"
              package="${jaxb.package}">
             <schema refid="schema.files"/>

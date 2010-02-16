@@ -1,5 +1,5 @@
 <!--
-  ~ Doms build framework version BUILD.FRAMEWORK.VERSION
+  ~ Doms build framework version 1.0.5
   ~
   ~ $Id$
   ~ $Revision$
@@ -30,14 +30,15 @@
 <!--This build-include sets the correct project lib dependencies
 for the module to build as a soap webservice-->
 <project name="soap-webservice">
-        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+        <!--Part of doms build framework version 1.0.5-->
     <property name="global.dir" value="${basedir}/.."/>
 
     <property file="${global.dir}/build.properties"/>
 
-    <selector id="soap.jars">
-        <filename name="${jaxws.dir}/jars/**/*.jar"/>
-    </selector>
+    <dirset id="soap" dir="${global.dir}/lib">
+        <include name="${jaxws.dir}"/>
+    </dirset>
+
 
 
 </project>

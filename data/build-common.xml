@@ -42,29 +42,18 @@
 
     <dirname property="common.basedir" file="${ant.file.common}"/>
 
-    <selector id="common.jars">
-        <filename name="${sbutils.dir}/jars/**/*.jar"/>
-    </selector>
-    <selector id="soap.jars">
-        <not>
-            <filename name="**"/>
-        </not>
-    </selector>
-    <selector id="rest.jars">
-        <not>
-            <filename name="**"/>
-        </not>
-    </selector>
 
-    <selector id="all.jars">
-        <or>
-            <selector refid="common.jars"/>
-            <selector refid="soap.jars"/>
-            <selector refid="rest.jars"/>
-        </or>
-    </selector>
+    <dirset id="soap" dir="${global.dir}/lib">
+        <exclude name="**/*"/>
+    </dirset>
 
+    <dirset id="rest" dir="${global.dir}/lib">
+        <exclude name="**/*"/>
+    </dirset>
 
+    <dirset id="common" dir="${global.dir}/lib">
+        <include name="${sbutils.dir}"/>
+    </dirset>
 
     <dirset id="module.dependencies" dir="${global.dir}/modules">
         <exclude name="**"/>
@@ -74,16 +63,6 @@
         <exclude name="**"/>
     </fileset>
 
-
-    <path id="build.classpath">
-        <fileset refid="module.libs"/>
-        <fileset refid="project.libs"/>
-        <fileset refid="module.dependencies.jars"/>
-        <fileset refid="build.project.libs"/>
-        <fileset dir="${global.dir}/lib">
-            <selector refid="all.jars"/>
-        </fileset>
-    </path>
 
 
     <target name="_preclean"/>
@@ -105,6 +84,32 @@
 
     <target name="init">
         <echo message="Using doms buildframework version BUILD.FRAMEWORK.VERSION"/>
+        <convertPath dirset="soap"
+                             postfix="/jars/*.jar"
+                             newfileset="soap.jars"/>
+
+        <convertPath dirset="rest"
+                             postfix="/jars/*.jar"
+                             newfileset="rest.jars"/>
+
+        <convertPath dirset="common"
+                             postfix="/jars/*.jar"
+                             newfileset="common.jars"/>
+
+        <convertPath dirset="project.libs"
+                             postfix="/jars/*.jar"
+                             newfileset="project.libs.jars"/>
+
+        <path id="build.classpath">
+            <fileset refid="module.libs"/>
+            <fileset refid="project.libs.jars"/>
+            <fileset refid="module.dependencies.jars"/>
+            <fileset refid="build.project.libs"/>
+            <fileset refid="soap.jars"/>
+            <fileset refid="rest.jars"/>
+            <fileset refid="common.jars"/>
+        </path>
+        
     </target>
 
 
@@ -211,7 +216,7 @@
     <target name="apidocs" depends="init, _preapidocs">
         <mkdir dir="docstemp"/>
         <mkdir dir="dist"/>
-        <javadoc sourcepath="src" destdir="docstemp"/>
+        <javadoc sourcepath="src" destdir="docstemp" classpathref="build.classpath"/>
         <zip destfile="dist/${docspack.zip}">
             <zipfileset dir="docstemp">
                 <include name="**/*"/>
@@ -221,4 +226,28 @@
         <antcall target="_postapidocs"/>
     </target>
 
+
+    <target  name="_copyLibsForDist">
+        <convertPath dirset="project.libs"
+                     postfix="/**/*"
+                     newfileset="project.libs.all"/>
+        <convertPath dirset="soap"
+                     postfix="/**/*"
+                     newfileset="soap.all"/>
+        <convertPath dirset="rest"
+                     postfix="/**/*"
+                     newfileset="rest.all"/>
+        <convertPath dirset="common"
+                     postfix="/**/*"
+                     newfileset="common.all"/>
+
+
+
+        <copy todir="${global.dir}/usedlibs" overwrite="false" >
+            <fileset refid="project.libs.all"/>
+            <fileset refid="soap.all"/>
+            <fileset refid="rest.all"/>
+            <fileset refid="common.all"/>
+        </copy>
+    </target>
 </project>
