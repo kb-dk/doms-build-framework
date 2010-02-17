@@ -28,70 +28,31 @@
   -->
 
 <project name="webservice">
-    <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
-    <property name="global.dir" value="${basedir}/.."/>
+
+    <import file="build-module.xml"/>
+
+    <fileset  id="webinf" dir="${basedir}/web/WEB-INF">
+    </fileset>
     
-    <property name="warfilename" value="${ant.project.name}.war"/>
-
-    <import file="build-common.xml"/>
-
-    <dirname property="webservice.basedir" file="${ant.file.webservice}"/>
-
-    <target name="war"
-            description="Pack the webdirectory into a warfile ready for deployment"
-            depends="init">
-        <delete dir="dist"/>
-        <mkdir dir="dist"/>
-
-        <copy todir="libtemp" flatten="true">
-            <fileset refid="module.libs"/>
-            <fileset refid="project.libs.jars"/>
-            <fileset refid="module.dependencies.jars"/>
-            <fileset refid="soap.jars"/>
-            <fileset refid="rest.jars"/>
-            <fileset refid="common.jars"/>
-        </copy>
-
-        <antcall target="war.with.wsdl"/>
-        <antcall target="war.without.wsdl"/>
-
-        <delete dir="libtemp"/>
-
+    <target name="war" depends="jar" unless="codeNotChanged">
+        <buildwar jars.to.pack="classpath"
+                  warfilename="${warfilename}"
+                  web-inf="webinf"
+                  wsdl.dir="${wsdl.dir}"/>
+        <delete file="dist/${jarfile}"/>
     </target>
 
-    <target name="war.with.wsdl" if="wsdl.dir">
-        <war destfile="dist/${warfilename}"
-             webxml="web/WEB-INF/web.xml">
-            <classes dir="classes"/>
-            <lib dir="libtemp"/>
-            <webinf dir="web/WEB-INF">
-                <exclude name="web.xml"/>
-            </webinf>
-
-            <webinf dir="${wsdl.dir}" prefix="WEB-INF/wsdl"/>
-            <fileset dir="web">
-                <exclude name="WEB-INF/**"/>
-            </fileset>
-        </war>
-
+    <target name="compile.check">
+        <uptodate property="codeNotChanged" targetfile="dist/${warfilename}">
+            <srcfiles dir="src">
+                <include name="**/*"/>
+            </srcfiles>
+        </uptodate>
     </target>
 
-    <target name="_copyLibsForDist"/>
+    <target name="all" depends="war,module.all"/>
 
-    <target name="war.without.wsdl" unless="wsdl.dir">
-        <war destfile="dist/${warfilename}"
-             webxml="web/WEB-INF/web.xml">
-            <classes dir="classes"/>
-            <lib dir="libtemp"/>
-            <webinf dir="web/WEB-INF">
-                <exclude name="web.xml"/>
-            </webinf>
-            <fileset dir="web">
-                <exclude name="WEB-INF/**"/>
-            </fileset>
-        </war>
-
-    </target>
-
+    <!--All project libs are packed in the war, do not copy them-->
+    <target  name="-copyLibsForDist"/>
 
 </project>

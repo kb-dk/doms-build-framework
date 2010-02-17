@@ -28,97 +28,56 @@
   -->
 
 <project name="soap-webservice-interface">
-        <!--Part of doms build framework version BUILD.FRAMEWORK.VERSION-->
+    <!--Part of doms build framework version 1.0.5-->
     <property name="global.dir" value="${basedir}/.."/>
 
-    <import file="build-common.xml"/>
+    <!--<import file="build-macros.xml"/>-->
 
     <property name="wsdl.file" value="THIS_SHOULD_BE_OVERRIDDEN"/>
     <property name="wsdl.dir" value="THIS_SHOULD_BE_OVERRIDDEN"/>
     <property name="wsdl.package" value="THIS_SHOULD_BE_OVERRIDDEN"/>
+    <import file="build-module.xml"/>
 
-    <import file="build-soap-webservice.xml"/>
+    <target name="depends"
+            depends="module.depends,interface.changed,interface.all"
+            unless="interfaceNotChanged">
 
-    <target name="_preinit" depends="interface.changed">
-        <mkdir dir="classes"/>
-        <mkdir dir="tempsrc"/>
-
-    </target>
-
-    <target name="_postclean">
-        <delete dir="tempsrc"/>
-    </target>
-
-    <target name="interface.forceRebuild">
-        <!--TODO so that new revisions are not created-->
-        <touch file="${wsdl.file}"/>
-        <antcall target="dist"/>
     </target>
 
     <target name="interface.changed">
-        <uptodate property="interfaceNotChanged">
+        <uptodate property="interfaceNotChanged" targetfile="dist/${jarfile}">
 
             <srcfiles dir="${wsdl.dir}">
                 <include name="**/*"/>
             </srcfiles>
-
-            <compositemapper>
-                <mergemapper
-                        to="${basedir}/dist/${jarfile}"/>
-                <mergemapper
-                        to="${basedir}/dist/${srcpack.zip}"/>
-            </compositemapper>
         </uptodate>
     </target>
 
-    <target name="_precompile">
-        <antcall target="interface.generate"/>
+    <target name="interface.all"
+            depends="interface.generate,interface.superexception"/>
+
+    <target name="interface.generate" unless="interfaceNotChanged">
+        <interface.generate wsdl.file="${wsdl.file}"
+                            wsdl.package="${wsdl.package}"/>
     </target>
 
-    <target name="interface.generate" depends="init"
-            unless="interfaceNotChanged">
-        <mkdir dir="tempsrc"/>
-        <!--
-            <property name="classpath" refid="build.classpath"/>
-            <echo message="${classpath}"/>
-        -->
-        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-            <classpath>
-                <fileset refid="soap.jars" />
-            </classpath>
-        </taskdef>
-        
-        <wsimport
-
-                verbose="true"
-                debug="true"
-                sourcedestdir="tempsrc"
-
-                package="${wsdl.package}"
-                wsdl="${wsdl.file}"
-                xnocompile="true"
-
-                >
-        </wsimport>
-        <antcall target="interface.generalSuperException"/>
+    <target name="superexception.check">
+        <condition property="insertSuperException">
+            <and>
+                <not>
+                    <isset property="interfaceNotChanged"/>
+                </not>
+                <isset property="generalSuperExceptionName"/>
+            </and>
+        </condition>
+    </target>
+    <target name="interface.superexception" depends="superexception.check"
+            if="insertSuperException">
+        <interface.generalSuperException
+                exceptionname="${generalSuperExceptionName}"/>
     </target>
 
-    <target name="interface.generalSuperException"
-            if="generalSuperExceptionName"
-            unless="interfaceNotChanged">
-        <replace dir="tempsrc" token="extends Exception"
-                 value="extends ${generalSuperExceptionName}">
-            <include name="**/*.java"/>
-        </replace>
-        <replaceregexp
-                flags="mg"
-                match="(^\s*throws\s*.*)\n\s*;"
-                replace="\1, ${generalSuperExceptionName};">
-            <fileset dir="tempsrc">
-                <include name="**/*.java"/>
-            </fileset>
-        </replaceregexp>
-    </target>
+
 
 
 </project>
