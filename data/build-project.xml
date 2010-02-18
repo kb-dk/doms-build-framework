@@ -135,7 +135,7 @@
             <fileset refid="project.modules.wars"/>
         </copy>
 
-        <copy todir="temp/licensestemp"><!--TODO licenses from module libs??-->
+        <copy todir="temp/licensestemp">
             <fileset refid="project.modules.licenses"/>
             <fileset dir="temp/usedlibs/">
                 <include name="**/license/*"/>
