@@ -27,7 +27,7 @@
   ~ under the License.
   -->
 
-<project name="common">
+<project name="buildframework">
 
     <property file="build.properties"/>
     <property name="temp" value="tempresources"/>
