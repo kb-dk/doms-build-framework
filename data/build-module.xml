@@ -32,9 +32,9 @@
 
     <!--These can be overriden in the module specific build file-->
 
-    <fileset id="module.libs" dir="${basedir}/lib">
-        <include name="**/jars/*.jar"/>
-    </fileset>
+    <dirset id="module.libs" dir="${basedir}/lib">
+        <include name="**"/>
+    </dirset>
 
 
     <dirset id="project.libs" dir="${global.dir}/lib">
@@ -60,18 +60,25 @@
     </target>
 
     <target name="distclean" depends="clean">
-<!--
-        <dependsloop target="distclean" dependencies="module.dependencies"/>
--->
+        <!--
+                <dependsloop target="distclean" dependencies="module.dependencies"/>
+        -->
     </target>
 
     <target name="depends">
         <dependsloop target="all" dependencies="module.dependencies"/>
     </target>
 
-    <target name="compile" depends="depends,compile.check" unless="codeNotChanged">
-        <echo message="Using doms buildframework version BUILD.FRAMEWORK.VERSION"/>
+    <target name="compile" depends="depends,compile.check"
+            unless="codeNotChanged">
+        <echo message="Using doms buildframework version 1.0.6#SNAPSHOT"/>
         <!--This is the classpath calculation-->
+        <convertPath dirset="module.libs"
+                     postfix="/jars/*.jar"
+                     newfileset="module.libs.jars"/>
+
+
+
         <convertPath dirset="project.libs"
                      postfix="/jars/*.jar"
                      newfileset="project.libs.jars"/>
@@ -86,7 +93,7 @@
 
 
         <path id="classpath">
-            <fileset refid="module.libs"/>
+            <fileset refid="module.libs.jars"/>
             <fileset refid="project.libs.jars"/>
             <fileset refid="dependencies.jars"/>
         </path>
@@ -123,17 +130,34 @@
     </target>
 
 
-    <target  name="-copyLibsForDist">
-<!--
-        <convertPath dirset="project.libs"
-                     postfix="/**/*"
-                     newfileset="project.libs.all"/>
--->
+    <target name="-copyLibsForDist" depends="-copyLicensesForDist">
+        <!--
+                <convertPath dirset="project.libs"
+                             postfix="/**/*"
+                             newfileset="project.libs.all"/>
+        -->
 
 
-        <copy todir="${global.dir}/usedlibs" overwrite="false" >
+        <copy todir="${global.dir}/temp/usedlibs" overwrite="false">
             <dirset refid="project.libs"/>
         </copy>
     </target>
-    
+
+    <target name="-copyLicensesForDist">
+        <convertPath dirset="project.libs"
+                     postfix="/license/*"
+                     newfileset="project.libs.license"/>
+
+        <convertPath dirset="module.libs"
+                     postfix="/license/*"
+                     newfileset="module.libs.license"/>
+
+
+        <copy todir="${global.dir}/temp/usedlibs" overwrite="false">
+            <fileset refid="project.libs.license"/>
+            <fileset refid="module.libs.license"/>
+        </copy>
+
+    </target>
+
 </project>
