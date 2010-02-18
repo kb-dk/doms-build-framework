@@ -36,7 +36,8 @@
     <property name="dist.name" value="${ant.project.name}-${version}"/>
     <property name="dist.zip" value="${dist.name}.zip"/>
     <property name="dist.src.zip" value="${dist.name}-src.zip"/>
-
+    <property name="dist.bin.zip" value="${dist.name}-bin.zip"/>
+    <property name="dist.doc.zip" value="${dist.name}-doc.zip"/>
 
 
 
@@ -51,34 +52,26 @@
         <delete dir="apidocstemp"/>
         <delete dir="licensestemp"/>
         <delete dir="${global.dir}/dist"/>
-        <delete  dir="libtemp"/>
-        <delete  dir="apidocstemp"/>
-        <delete  dir="licensetemp"/>
-        <delete  dir="usedlibs"/>
+        <delete dir="libtemp"/>
+        <delete dir="apidocstemp"/>
+        <delete dir="licensetemp"/>
+        <delete dir="usedlibs"/>
+        <dependsloop target="clean" dependencies="project.modules"/>
     </target>
 
 
-
     <target name="distclean" depends="clean">
-
-        <subant target="clean">
-            <fileset dir="." includes="**/build.xml"/>
-        </subant>
+        <dependsloop target="distclean" dependencies="project.modules"/>
 
     </target>
 
     <target name="compile">
-        <subant target="compile">
-            <fileset dir="." includes="**/build.xml"/>
-        </subant>
-
+        <dependsloop target="compile" dependencies="project.modules"/>
     </target>
 
     <target name="test">
-        <subant target="compile">
-            <fileset dir="." includes="**/test.xml"/>
-        </subant>
-
+        <!--TODO real tests-->
+        <dependsloop target="compile" dependencies="project.modules"/>
     </target>
 
 
@@ -87,12 +80,14 @@
         <mkdir dir="dist"/>
         <path id="build.classpath">
             <fileset dir="${global.dir}/lib">
-                <include  name="**/*.jar"/>
+                <include name="**/*.jar"/>
             </fileset>
         </path>
 
-        <convertPath dirset="project.modules" postfix="/src/**/*.java" newfileset="project.modules.javafiles"/>
-        <convertPath dirset="project.modules" postfix="/tempsrc/**/*.java" newfileset="project.modules.javatempfiles"/>
+        <convertPath dirset="project.modules" postfix="/src/**/*.java"
+                     newfileset="project.modules.javafiles"/>
+        <convertPath dirset="project.modules" postfix="/tempsrc/**/*.java"
+                     newfileset="project.modules.javatempfiles"/>
 
         <javadoc destdir="docstemp" classpathref="build.classpath">
             <sourcefiles>
@@ -100,19 +95,16 @@
                 <fileset refid="project.modules.javatempfiles"/>
             </sourcefiles>
         </javadoc>
-        <zip destfile="dist/${docspack.zip}">
-            <zipfileset dir="docstemp">
+        <zip destfile="dist/${dist.doc.zip}">
+            <zipfileset dir="docstemp" prefix="${dist.name}">
                 <include name="**/*"/>
             </zipfileset>
         </zip>
         <delete dir="docstemp"/>
     </target>
 
-    <target  name="-rebuildProject" depends="distclean">
-        <dependsloop target="all" dependencies="project.modules"/>
-    </target>
 
-    <target name="release.bin" depends="-rebuildProject">
+    <target name="release.bin">
 
         <mkdir dir="dist"/>
         <mkdir dir="libtemp"/>
@@ -120,6 +112,7 @@
         <mkdir dir="licensestemp"/>
         <mkdir dir="usedlibs"/>
 
+        <dependsloop target="all" dependencies="project.modules"/>
         <!--Collect the used project libs from all the ordinary modules -->
         <dependsloop target="-copyLibsForDist" dependencies="project.modules"/>
 
@@ -148,8 +141,12 @@
                 <include name="**/jars/*.jar"/>
             </fileset>
             <fileset refid="project.modules.jars"/>
+        </copy>
+
+        <copy todir="wartemp" flatten="true" failonerror="false">
             <fileset refid="project.modules.wars"/>
         </copy>
+
 
         <copy todir="apidocstemp" flatten="true">
             <fileset refid="project.modules.apidocs"/>
@@ -164,9 +161,9 @@
         </copy>
 
 
-        <zip destfile="dist/${dist.zip}">
-            <zipfileset prefix="${dist.name}/jars" dir="libtemp">
-            </zipfileset>
+        <zip destfile="dist/${dist.bin.zip}">
+            <zipfileset prefix="${dist.name}/jars" dir="libtemp"/>
+            <zipfileset prefix="${dist.name}/wars" dir="wartemp"/>
             <zipfileset prefix="${dist.name}/license" dir="licensestemp"/>
             <zipfileset prefix="${dist.name}/license" dir="${global.dir}">
                 <include name="LICENSE"/>
@@ -193,6 +190,12 @@
         </zip>
     </target>
 
-    <target name="release" depends="release.src,release.bin,release.doc"/>
+    <target name="release" depends="release.src,release.bin,release.doc">
+        <zip destfile="dist/${dist.zip}">
+            <zipgroupfileset file="dist/${dist.bin.zip}"/>
+            <zipfileset file="dist/${dist.src.zip}" prefix="${dist.name}/src"/>
+            <zipfileset file="dist/${dist.doc.zip}" prefix="${dist.name}/apidocs"/>
+        </zip>
+    </target>
 
 </project>

@@ -36,7 +36,9 @@
     <property name="wsdl.file" value="THIS_SHOULD_BE_OVERRIDDEN"/>
     <property name="wsdl.dir" value="THIS_SHOULD_BE_OVERRIDDEN"/>
     <property name="wsdl.package" value="THIS_SHOULD_BE_OVERRIDDEN"/>
+
     <import file="build-module.xml"/>
+    <import file="build-macros-jaxws.xml"/>
 
     <target name="depends"
             depends="module.depends,interface.changed,interface.all"

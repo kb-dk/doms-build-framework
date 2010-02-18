@@ -60,7 +60,9 @@
     </target>
 
     <target name="distclean" depends="clean">
+<!--
         <dependsloop target="distclean" dependencies="module.dependencies"/>
+-->
     </target>
 
     <target name="depends">
