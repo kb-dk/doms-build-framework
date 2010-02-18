@@ -95,7 +95,6 @@
         <delete dir="temp/docstemp"/>
     </target>
 
-
     <target name="release.bin">
 
         <mkdir dir="dist"/>
@@ -103,7 +102,9 @@
         <mkdir dir="temp/libtemp"/>
         <mkdir dir="temp/licensestemp"/>
         <mkdir dir="temp/usedlibs"/>
+<!--
         <mkdir dir="temp/wartemp"/>
+-->
 
         <dependsloop target="all" dependencies="project.modules"/>
         <!--Collect the used project libs from all the ordinary modules -->
@@ -146,7 +147,7 @@
 
         <zip destfile="dist/${dist.bin.zip}">
             <zipfileset prefix="${dist.name}/jars" dir="temp/libtemp"/>
-            <zipfileset prefix="${dist.name}/wars" dir="temp/wartemp"/>
+            <zipfileset prefix="${dist.name}/wars" dir="temp/wartemp" erroronmissingdir="false"/>
             <zipfileset prefix="${dist.name}/license" dir="temp/licensestemp"/>
             <zipfileset prefix="${dist.name}/license" dir="${global.dir}">
                 <include name="LICENSE"/>
@@ -161,6 +162,7 @@
         <delete dir="temp/wartemp"/>
 
     </target>
+
 
 
     <target name="release.src" depends="distclean">
