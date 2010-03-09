@@ -108,7 +108,7 @@
 
         <dependsloop target="all" dependencies="project.modules"/>
         <!--Collect the used project libs from all the ordinary modules -->
-        <dependsloop target="-copyLibsForDist" dependencies="project.modules"/>
+        <dependsloop target="_copyLibsForDist" dependencies="project.modules"/>
 
         <!--The list of produced jars-->
         <convertPath dirset="project.modules"
