@@ -225,7 +225,7 @@
                     <include name="*.jar"/>
                 </lib>
                 <webinf refid="@{web-inf}" prefix="WEB-INF"/>
-                <webinf dir="@{wsdl.dir}" prefix="WEB-INF/wsdl"/>
+                <webinf dir="@{wsdl.dir}" prefix="WEB-INF/wsdl" erroronmissingdir="false"/>
             </war>
             <delete dir="libtemp"/>
         </sequential>
