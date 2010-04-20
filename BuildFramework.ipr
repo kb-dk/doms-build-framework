@@ -270,41 +270,6 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
-              <option name="branchMap">
-                <map>
-                  <entry key="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/branches">
-                    <value>
-                      <list />
-                    </value>
-                  </entry>
-                  <entry key="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/tags">
-                    <value>
-                      <list>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1266501401961" />
-                          <option name="revision" value="277" />
-                          <option name="url" value="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/tags/release-1.0.6" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1266322822122" />
-                          <option name="revision" value="255" />
-                          <option name="url" value="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/tags/release-1.0.5" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1265364514751" />
-                          <option name="revision" value="214" />
-                          <option name="url" value="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/tags/release-1.0.4" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1265301563544" />
-                          <option name="revision" value="206" />
-                          <option name="url" value="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/tags/release-1.0.3" />
-                        </SvnBranchItem>
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
               <option name="branchUrls">
                 <list>
                   <option value="https://doms.svn.sourceforge.net/svnroot/doms/buildframework/branches" />
