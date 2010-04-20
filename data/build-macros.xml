@@ -52,6 +52,9 @@
         <fileset dir="${my.basedir}/${bsf.folder}">
             <include name="*.jar"/>
         </fileset>
+        <fileset dir="${my.basedir}/${commonslogging.folder}">
+            <include name="*.jar"/>
+        </fileset>
     </path>
 
     <!--Call the specified target in all the specified dirs-->
