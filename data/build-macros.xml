@@ -152,6 +152,9 @@
                 <zipfileset dir="src">
                     <include name="**/*"/>
                 </zipfileset>
+                <zipfileset dir="tempsrc" erroronmissingdir="false">
+                    <include name="**/*"/>
+                </zipfileset>
             </zip>
         </sequential>
     </macrodef>
