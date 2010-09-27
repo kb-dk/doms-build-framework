@@ -27,7 +27,7 @@
   ~ under the License.
   -->
 
-<project name="webservice">
+<project name="executable">
     <import file="build-module.xml"/>
 
       <target name="executable" depends="jar">
