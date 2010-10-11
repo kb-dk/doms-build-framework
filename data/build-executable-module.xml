@@ -38,4 +38,7 @@
 
     <target name="all" depends="executable,module.all"/>
 
+    <target name="clean" depends="module.clean">
+        <delete dir="tempjars"/>
+    </target>
 </project>
