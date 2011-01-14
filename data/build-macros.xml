@@ -144,7 +144,19 @@
             <mkdir dir="dist"/>
 
             <jar destfile="dist/@{jarfile}"
-                 basedir="classes"/>
+                 basedir="classes">
+                <manifest>
+                    <attribute name="Title" value="@{jarfile}"/>
+                    <attribute name="Built-by" value="${user.name}"/>
+                    <attribute name="Version" value="${version}"/>
+                    <attribute name="Svn-revision" value="${svn.Revision}"/>
+                    <attribute name="Svn-url" value="${svn.URL}"/>
+                    <attribute name="Svn-last-changed-rev" value="${svn.Last Changed Rev}"/>
+                    <attribute name="Build-date" value="${NOW}"/>
+                </manifest>
+
+
+            </jar>
         </sequential>
     </macrodef>
 
@@ -248,11 +260,11 @@
                         erroronmissingdir="false"/>
                 <manifest>
 
-                        <attribute name="Title" value="@{warfilename}"/>
-                        <attribute name="Built-by" value="${user.name}"/>
-                        <attribute name="Version" value="${version}"/>
-                        <attribute name="Svn-revision" value="${svn.Revision}"/>
-                        <attribute name="Build-date" value="${NOW}"/>
+                    <attribute name="Title" value="@{warfilename}"/>
+                    <attribute name="Built-by" value="${user.name}"/>
+                    <attribute name="Version" value="${version}"/>
+                    <attribute name="Svn-revision" value="${svn.Revision}"/>
+                    <attribute name="Build-date" value="${NOW}"/>
 
                 </manifest>
             </war>
